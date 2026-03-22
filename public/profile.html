@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — Chronicle</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ─── Top Navigation ─────────────────────────────────────────────────────── -->
+  <nav class="topnav">
+    <span class="nav-logo" style="cursor:pointer;" onclick="window.location.href='/index.html'">Chronicle</span>
+
+    <div class="nav-user">
+      <span>Hello, <span class="nav-username" id="nav-username"></span></span>
+      <button class="btn btn-ghost btn-sm" onclick="window.location.href='/index.html'">← Feed</button>
+      <button class="btn btn-ghost btn-sm" onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- ─── Profile Layout ────────────────────────────────────────────────────── -->
+  <div style="max-width: 700px; margin: 32px auto; padding: 0 24px;">
+
+    <!-- Alert box for profile actions -->
+    <div id="profile-alert"></div>
+
+    <!-- Profile Card (populated by JS) -->
+    <div id="profile-header">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Edit Profile Form (shown only to the profile owner) -->
+    <div class="profile-edit-form hidden" id="edit-form">
+      <h3>Edit Profile</h3>
+
+      <div class="form-group">
+        <label for="edit-username">Username</label>
+        <input type="text" id="edit-username" />
+      </div>
+
+      <div class="form-group">
+        <label for="edit-bio">Bio</label>
+        <textarea id="edit-bio" placeholder="Tell us about yourself…" rows="3"></textarea>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-primary" style="width:auto;" onclick="saveProfile()">Save Changes</button>
+        <button class="btn btn-ghost" onclick="cancelEdit()">Cancel</button>
+      </div>
+    </div>
+
+    <!-- User's Posts -->
+    <div class="feed-header">
+      <h1 id="posts-heading" style="font-size:1.2rem;">Posts</h1>
+    </div>
+
+    <div id="user-posts-container">
+      <div class="spinner"></div>
+    </div>
+
+    <div class="pagination" id="pagination"></div>
+
+  </div>
+
+  <script src="/auth.js"></script>
+  <script src="/posts.js"></script>
+  <script src="/profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chronicle — Feed</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ─── Top Navigation ─────────────────────────────────────────────────────── -->
+  <nav class="topnav">
+    <span class="nav-logo">Chronicle</span>
+
+    <!-- Feed mode switcher -->
+    <div class="nav-tabs">
+      <button class="nav-tab active" id="tab-all" onclick="switchTab('all')">All Posts</button>
+      <button class="nav-tab" id="tab-feed" onclick="switchTab('feed')">My Feed</button>
+    </div>
+
+    <div class="nav-user">
+      <span>Hello, <span class="nav-username" id="nav-username" onclick="goToMyProfile()"></span></span>
+      <button class="btn btn-ghost btn-sm" onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+
+  
+ <div class="search-bar">
+  <input type="text" id="search-input" placeholder="Search users…" autocomplete="off" />
+  <div class="search-results hidden" id="search-results"></div>
+</div>
+
+  <!-- ─── App Layout ──────────────────────────────────────────────────────────── -->
+  <div class="app-layout" style="grid-template-rows: 0; display: block; max-width: 1200px; margin: 0 auto;">
+    <div style="display: grid; grid-template-columns: 220px 1fr 260px; gap: 0; min-height: calc(100vh - 60px);">
+
+      <!-- Left Sidebar -->
+      <aside class="sidebar-left">
+        <div class="sidebar-label">Menu</div>
+        <nav class="sidebar-nav">
+          <button class="sidebar-link active" onclick="switchTab('all')">
+            <span class="icon">🏠</span> Home
+          </button>
+          <button class="sidebar-link" onclick="switchTab('feed')">
+            <span class="icon">📰</span> My Feed
+          </button>
+          <button class="sidebar-link" onclick="goToMyProfile()">
+            <span class="icon">👤</span> Profile
+          </button>
+        </nav>
+      </aside>
+     
+
+      <!-- Main Content -->
+      <main class="main-feed">
+
+        <!-- Create Post Box -->
+        <div class="create-post-box">
+          <textarea
+            id="post-content"
+            placeholder="What's on your mind?"
+            maxlength="500"
+          ></textarea>
+          <div class="create-post-footer">
+            <span class="char-count" id="char-count">0 / 500</span>
+            <button class="btn btn-primary" style="width:auto;" id="post-btn">
+              Post
+            </button>
+          </div>
+          <div id="post-alert"></div>
+        </div>
+
+        <!-- Feed Header -->
+        <div class="feed-header">
+          <h1 id="feed-title">All Posts</h1>
+        </div>
+
+        <!-- Posts Container -->
+        <div id="posts-container">
+          <div class="spinner"></div>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination" id="pagination"></div>
+      </main>
+
+      <!-- Right Sidebar -->
+      <aside class="sidebar-right">
+        <div class="sidebar-label">Discover People</div>
+        <div id="suggestions-container">
+          <div class="spinner"></div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- Load shared utilities first, then page logic -->
+  <script src="/auth.js"></script>
+  <script src="/posts.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

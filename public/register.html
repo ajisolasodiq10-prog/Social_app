@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register — Chronicle</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="auth-page">
+
+  <div class="auth-card">
+    <div class="auth-logo">Chronicle</div>
+    <h2>Create your account</h2>
+    <p class="auth-subtitle">Join the conversation. It's free.</p>
+
+    <!-- Alert box — shown on error or success -->
+    <div id="alert-box"></div>
+
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input
+        type="text"
+        id="username"
+        placeholder="your_handle"
+        autocomplete="username"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="you@example.com"
+        autocomplete="email"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="At least 6 characters"
+        autocomplete="new-password"
+        required
+      />
+    </div>
+
+    <button class="btn btn-primary" id="register-btn">
+      Create Account
+    </button>
+
+    <div class="auth-link">
+      Already have an account? <a href="/login.html">Sign in</a>
+    </div>
+  </div>
+
+  <!-- auth.js provides: redirectIfLoggedIn, saveAuthData, showAlert -->
+  <script src="/auth.js"></script>
+  <script>
+    // If the user is already logged in, go to the feed
+    redirectIfLoggedIn();
+
+    const alertBox = document.getElementById("alert-box");
+    const btn = document.getElementById("register-btn");
+
+    btn.addEventListener("click", async () => {
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      // Basic client-side validation
+      if (!username || !email || !password) {
+        return showAlert(alertBox, "Please fill in all fields.");
+      }
+      if (password.length < 6) {
+        return showAlert(alertBox, "Password must be at least 6 characters.");
+      }
+
+      btn.textContent = "Creating account…";
+      btn.disabled = true;
+
+      try {
+        // Send registration request to the backend
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, email, password }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          // Server returned an error (e.g. email already taken)
+          showAlert(alertBox, data.message || "Registration failed.");
+        } else {
+          // Registration successful — save auth data and redirect to feed
+          saveAuthData(data);
+          window.location.href = "/index.html";
+        }
+      } catch (err) {
+        showAlert(alertBox, "Network error. Please try again.");
+      } finally {
+        btn.textContent = "Create Account";
+        btn.disabled = false;
+      }
+    });
+
+    // Allow pressing Enter to submit
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") btn.click();
+    });
+  </script>
+</body>
+</html>
